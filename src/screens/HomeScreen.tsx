@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
 import { RootStackParamList } from '../../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MeasureAjduster from '../components/MeasureAdjuster';
+import ActionButton from '../components/ActionButton';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>
 }
 
+const MALE_DEFAULT = require('../../assets/images/Male3.png')
+const FEMALE_DEFAULT = require('../../assets/images/Female3.png')
+
 export default function HomeScreen({ navigation }: HomeScreenProps) {
 
   const [name, setName] = useState('')
+  
+  const [gender, setGender] = useState<'male' | 'female'>('male');
 
-  const goToResult = () => {
-    navigation.navigate('Result')
+const [height, setHeight] = useState<number>(170);
+const [weight, setWeight] = useState<number>(70);
+
+  
+  const image = gender === 'male' ? MALE_DEFAULT : FEMALE_DEFAULT;
+
+  const calculateIMC = ()=>{
+    navigation.navigate('Result', {
+      name: name,
+      gender: gender,
+      weight: weight,
+      height: height
+    })
   }
 
   return (
@@ -30,11 +48,75 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
         />
       </View>
 
+    <View style={styles.imageContainer}>
+    <Image source={image} style={styles.image} resizeMode='contain'/>
+    </View>
+
+    <View style={styles.genderRow}>
+      <TouchableOpacity onPress={()=> setGender('male')} activeOpacity={0.5}>
+        <Text style={[styles.genderText, gender === 'male' && styles.genderActive]}>Homem</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={()=> setGender('female')} activeOpacity={0.5}>
+        <Text style={[styles.genderText, gender === 'female' && styles.genderActive]}>Mulher</Text>
+      </TouchableOpacity>
+    </View>
+
+    <View style={styles.measuresContainer}>
+        <MeasureAjduster 
+  type='height' 
+  value={height} 
+  onIncremet={() => setHeight((prev) => prev + 1)}
+  onDecrement={() => setHeight((prev) => Math.max(1, prev - 1))}
+/>
+
+<MeasureAjduster 
+  type='weight' 
+  value={weight} 
+  onIncremet={() => setWeight((prev) => prev + 1)}
+  onDecrement={() => setWeight((prev) => Math.max(1, prev - 1))}
+/>
+    </View>
+    <View style={styles.buttonContainer}>
+      <ActionButton title='Calcular IMC' onPress={calculateIMC}/>
+    </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    width: '100%',
+    marginTop: 10,
+  },
+  measuresContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+
+  genderActive: {
+    fontWeight: 'bold'
+  },
+  genderText:{
+    fontSize: 18,
+    color: '#F5A623',
+    fontWeight: '400',
+  },
+
+  genderRow: {
+    flexDirection: 'row',
+    gap: 30,
+    marginBottom: 20,
+  },
+
+  image:{
+    width: 200,
+    height: 260
+  },
+  imageContainer: {
+      alignItems: 'center',
+      marginBottom: 10
+  },
   inputIcon: {
     marginRight: 8,
   },
@@ -66,7 +148,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF5E6',
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingTop: 60,
