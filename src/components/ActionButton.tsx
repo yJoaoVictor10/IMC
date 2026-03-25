@@ -1,17 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native"
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-interface ActionButonProps{
-    title: string,
-    onPress: ()=> void;
+interface ActionButtonProps {
+    title: string;
+    onPress: () => void;
 }
 
-export default function ActionButton({title, onPress} : ActionButonProps){
-
-
+export default function ActionButton({ title, onPress }: ActionButtonProps) {
     return(
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onPress}>
             <Text style={styles.buttonText}>
-                Botão
+                {title}
             </Text>
         </TouchableOpacity>
     )
@@ -26,14 +24,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         shadowColor: '#F5A623',
-        shadowOffset: {width: 0, height: 4},
+        shadowOffset: { width: 0, height: 4},
         shadowOpacity: 0.3,
         shadowRadius: 8,
-        elevation: 1,
+        elevation: 4
     },
-
     buttonText: {
         color: '#FFF',
-        fontWeight: 'bold',
+        fontSize: 18,
+        fontWeight: 'bold'
     }
 })
