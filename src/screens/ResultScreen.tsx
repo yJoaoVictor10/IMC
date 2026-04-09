@@ -1,8 +1,9 @@
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
 import { RouteProp } from '@react-navigation/native';
 import ActionButton from '../components/ActionButton';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 type ResultScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Result'>;
@@ -69,11 +70,23 @@ export default function ResultScreen({ navigation, route }: ResultScreenProps) {
             onPress={() => navigation.goBack()}
           />
         </View>
+
+        <TouchableOpacity style={styles.tipsButton} onPress={()=> navigation.navigate('Tips', {imc, classification})}>
+          <FontAwesome5 className='lightbulb' size={18} color='#333' />
+          <Text>Ver dias e detalhes</Text>
+
+        </TouchableOpacity>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  tipsButton: {
+    flexDirection: 'row',
+    marginVertical: 26,
+    alignItems: 'center',
+    gap: 8
+  },
   buttonContainer: {
     width: '100%',
     marginTop: 10,
